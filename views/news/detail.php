@@ -52,7 +52,7 @@
     <div class="card-body">
         <p class="text-muted">Ngày đăng: <?php echo htmlspecialchars($news['created_at']); ?></p>
         <hr>
-        <img src="<?php echo $_SERVER['DOCUMENT_ROOT'] . '/data/' . htmlspecialchars($news['image']); ?>" alt="News Image" width="300">
+        <img src="<?php echo 'D:\laragon\www\CSE485-tlunews\data\\' . htmlspecialchars($news['image']); ?>" alt="News Image" width="300">
         <p><?php echo nl2br(htmlspecialchars($news['content'])); ?></p>
     </div>
     <div class="card-footer text-right">
