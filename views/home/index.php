@@ -34,11 +34,25 @@
             <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                 <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
             </form>
-
+            <div class="text-end d-flex gap-2">
+                <?php if (isset($_SESSION['user'])): ?>
+                    <a href="index.php?controller=admin&action=logout">Đăng xuất (<?= $_SESSION['user']['username'] ?>)</a>
+                <?php else: ?>
+                    <a href="index.php?controller=admin&action=login">Đăng nhập</a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 
 </header>
+<div class="container py-3">
+    <?php foreach ($newsList as $news): ?>
+        <h2><a href="index.php?controller=news&action=detail&id=<?= $news['id'] ?>"><?= $news['title'] ?></a></h2>
+        <p><?= substr($news['content'], 0, 100) ?>...</p>
+    <?php endforeach; ?>
+
+</div>
+</div>
 
 <!-- Footer -->
 <div class="container my-5">

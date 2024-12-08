@@ -1,38 +1,4 @@
-<?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: /controllers/AdminController.php"); // Chuyển hướng tới trang đăng nhập nếu chưa đăng nhập
-    exit();
-}
-require_once 'Database.php';
-$db = new Database();
-$conn = $db->connect();
-$id = $_GET['id'];
-if (!is_numeric($id)) {
-    echo "ID không hợp lệ.";
-    exit();
-}
-try {
-    $sql_by_id = "SELECT * FROM news WHERE id = :id";
-    $stmt = $conn->prepare($sql_by_id);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
-    $stmt->execute();
-    $news = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$news) {
-        echo "Không tìm thấy bài viết.";
-        exit();
-    }
-    echo "Tiêu đề bài viết: " . $news['title'];
-
-} catch (PDOException $e) {
-    echo "Lỗi kết nối hoặc truy vấn: " . $e->getMessage();
-}
-// Đóng kết nối
-$db->disconnect();
-?>
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,10 +35,10 @@ $db->disconnect();
                 <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
             </form>
             <div class="text-end d-flex gap-2">
-                <?php if ($is_logged_in): ?>
-                    <a href="" class="btn btn-danger">Đăng xuất</a>
+                <?php if (isset($_SESSION['user'])): ?>
+                    <a href="index.php?controller=admin&action=logout">Đăng xuất (<?= $_SESSION['user']['username'] ?>)</a>
                 <?php else: ?>
-                    <a href=".../controllers/AdminController.php" class="btn btn-primary">Đăng nhập</a>
+                    <a href="index.php?controller=admin&action=login">Đăng nhập</a>
                 <?php endif; ?>
             </div>
         </div>
@@ -84,10 +50,11 @@ $db->disconnect();
         <h2><?php echo htmlspecialchars($news['title']); ?></h2>
     </div>
     <div class="card-body">
-        <p class="text-muted">Ngày đăng: <?php echo htmlspecialchars(news['created_at']); ?></p>
+        <p class="text-muted">Ngày đăng: <?php echo htmlspecialchars($news['created_at']); ?></p>
         <hr>
-        <img src="<?php echo htmlspecialchars($news['image']);?>" alt="" width="300">
-        <p><?php echo htmlspecialchars(news['content']); ?></p>
+        <?php$a = APP_ROOT.'<?php echo htmlspecialchars($news['image']); ?>';?>
+        <img src="<?php echo $a?>" alt="" width="300">
+        <p><?php echo nl2br(htmlspecialchars($news['content'])); ?></p>
     </div>
     <div class="card-footer text-right">
         <a href=".../views/home/index.php" class="btn btn-secondary">Quay lại trang chủ</a>
