@@ -1,22 +1,29 @@
 <?php
-require_once 'controllers/CategoryController.php';
-require_once 'db.php'; //Kết nối
-
-$controller = $_GET['controller'] ?? 'home';
+session_start();
+define("APP_ROOT", __DIR__);
+$controller = $_GET['controller'] ?? 'news';
 $action = $_GET['action'] ?? 'index';
-$id = $_GET['id'] ?? null;
 
 switch ($controller) {
-    case 'category':
-        $categoryController = new CategoryController($db);
-        if ($action === 'index') {
-            $categoryController->index();
-        } elseif ($action === 'add') {
-            $categoryController->add();
-        } elseif ($action === 'edit') {
-            $categoryController->edit($id);
-        } elseif ($action === 'delete') {
-            $categoryController->delete($id);
+    case 'news':
+        require_once "controllers/NewsController.php";
+        $newsController = new NewsController();
+        if ($action == 'index') {
+            $newsController->index();
+        } elseif ($action == 'detail') {
+            $id = $_GET['id'];
+            $newsController->detail($id);
+        }
+        break;
+
+    case 'admin':
+        require_once "controllers/AdminController.php";
+        $adminController = new AdminController();
+        if ($action == 'login') {
+            $adminController->login();
+        } elseif ($action == 'logout') {
+            session_destroy();
+            header("Location: index.php");
         }
         break;
 }
