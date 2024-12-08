@@ -1,34 +1,36 @@
-<?php>
+<?php
 session_start();
-// Kiểm tra người dùng đã đăng nhập chưa
 if (!isset($_SESSION['user_id'])) {
     header("Location: /controllers/AdminController.php"); // Chuyển hướng tới trang đăng nhập nếu chưa đăng nhập
     exit();
 }
-$servername = "10.0.10.1";
-$username = "ngoanh";
-$password = "123123@";
-$dbname = "tintuc";
+require_once 'Database.php';
+$db = new Database();
+$conn = $db->connect();
 $id = $_GET['id'];
 if (!is_numeric($id)) {
     echo "ID không hợp lệ.";
     exit();
 }
-
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $sql_by_id = "Select * from news where id = :id";
+    $sql_by_id = "SELECT * FROM news WHERE id = :id";
     $stmt = $conn->prepare($sql_by_id);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
     $stmt->execute();
-    $news = $stmt->fetch();
-}
-catch (PDOException $e) {
-    echo $e->getMessage();
-}
+    $news = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$news) {
+        echo "Không tìm thấy bài viết.";
+        exit();
+    }
+    echo "Tiêu đề bài viết: " . $news['title'];
 
-$conn = null;
+} catch (PDOException $e) {
+    echo "Lỗi kết nối hoặc truy vấn: " . $e->getMessage();
+}
+// Đóng kết nối
+$db->disconnect();
 ?>
-
 
 ?>
 <!DOCTYPE html>
