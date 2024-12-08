@@ -4,20 +4,45 @@ class Database {
     private $dbname = 'tintuc';
     private $username = 'application';
     private $password = '@pplication12345@@';
-    private $conn;
+    public $conn;
 
-    public function connect($query)
-    {
-        try {
-            $conn = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->username, $this->password);
-            $stmt = $conn->prepare($query);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+    // public function __construct() {
+    //     $this -> conn = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->username, $this->password);
+    // }
+
+    public function connect() {
+        $this->conn = new mysqli($this->host, $this->username, $this->password, $this->dbname);
+
+        if ($this->conn->connect_error) {
+            die("Kết nối thất bại: " . $this->conn->connect_error);
         }
-        catch (PDOException $e) 
-        {
-            return null;
-        }
-    }
+
+        return $this->conn;
+    }   
+
+    // public function exec($query)
+    // {
+    //     try {
+            
+    //         return $conn->query($query);
+    //     }
+    //     catch (PDOException $e) 
+    //     {
+    //         return null;
+    //     }
+    // }
+
+    // public function execf($query)
+    // {
+    //     try {
+    //         $stmt = $this->conn->prepare($query);
+    //         $stmt->execute();
+    //         return $stmt->fetchall(PDO::FETCH_ASSOC);
+    //     }
+    //     catch (PDOException $e) 
+    //     {
+    //         return null;
+    //     }
+    // }
 }
 ?>
