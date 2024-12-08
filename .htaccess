@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Đảm bảo không chỉnh sửa các file hoặc thư mục tồn tại
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Quy tắc cho login
+RewriteRule ^login$ views/admin/login.php [L]
+RewriteRule ^dashboard$ views/admin/dashboard.php [L]
+RewriteRule ^logout$ controllers/AdminController.php [L]
+RewriteRule ^register$ controllers/AdminController.php [L]
