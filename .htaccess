@@ -7,4 +7,4 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # Quy tắc cho login
 RewriteRule ^login$ views/admin/login.php [L]
 RewriteRule ^dashboard$ views/admin/dashboard.php [L]
-#RewriteRule ^login$ views/admin/login.php [L]
+RewriteRule ^logout$ views/admin/AdminController.php [L]
